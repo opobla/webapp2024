@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+  <meta charset="utf-8" />
+  <title>Mi primera aplicación web</title>
+  <link type="text/css" rel="stylesheet"
+        href="{{ url_for('static', filename='hello.css')}}" />
+</head>
+<body>
+
+	<h1>Hola {{ nombre }}</h1>
+	<p>Hola Mundo!</p>
+	<p>Ahora mismo son las {{timestamp}}</p>
+	<p>Eres el visitante número {{contador_visitas}}</p>
+
+</body>
+</html>
