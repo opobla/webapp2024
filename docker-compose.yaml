@@ -7,11 +7,24 @@ services:
     expose: 
       - 6379
 
-  webapp:
-    build: ./app
-    image: europe-west1-docker.pkg.dev/aso-git/webs/webapp:latest
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+      - POSTGRES_USER=myuser
+      - POSTGRES_DB=mydb
     volumes:
-      - ./app:/app
+      - postgres_data:/var/lib/postgresql/data
+    networks: 
+      - web_network
+    expose: 
+      - 5432
+
+  greetings:
+    build: ./greetings
+    image: europe-west1-docker.pkg.dev/aso-git/webs/greetings:latest
+    volumes:
+      - ./greetings:/app
     networks: 
       - web_network
     environment:
@@ -20,7 +33,27 @@ services:
       - REDIS_LOCATION=redis
       - REDIS_PORT=6379
     ports:
-      - 80:8080
+      - 82:8080
 
+  catalog:
+    build: ./catalog
+    image: europe-west1-docker.pkg.dev/aso-git/webs/catalog:latest
+    volumes:
+      - ./catalog:/app
+    networks: 
+      - web_network
+    environment:
+      - PORT=8080
+      - DB_USER=myuser
+      - DB_PASSWORD=mysecretpassword
+      - DB_NAME=mydb
+      - DB_HOST=db
+      - DB_PORT=5432
+    ports:
+      - 81:8080
+        
 networks:
   web_network:
+
+volumes:
+  postgres_data:

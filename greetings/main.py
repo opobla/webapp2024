@@ -51,6 +51,10 @@ def adios():
     """
     return "Adios mundo"
 
+@APP.route('/consumo/<servicio>')
+def consumo(servicio):
+    return "servicio " + servicio
+
 if __name__ == '__main__':
     APP.debug = True
     APP.run(host='0.0.0.0', port=os.environ['PORT'])
